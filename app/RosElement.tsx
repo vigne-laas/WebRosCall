@@ -93,7 +93,7 @@ export function RosElementTopicEcho(json) {
     function onHandleClick() {
         if (localClient) {
             localClient.subscribe((message: any) => {
-                setLocalMessage((message.percentage * 100).toFixed(2) + '%');
+                setLocalMessage(message);
                 console.log('Received message on ' + localClient.name + ': ' + message.percentage);
             });
         } else {
@@ -208,63 +208,65 @@ export function RosElementAction(json) {
                 actionName: localJson.ActionName,
             });
 
-            // setGoal(new ROSLIB.Goal(localJson.Goal));//todo vérifier le json
-
-            // goal.on('feedback', function (feedback) {
-            //     console.log('Feedback: ' + feedback.sequence);
-            //     setLocalFeedBack(feedback.sequence); //TODO vérifier le type de feedback pour transformer en string
-            // });
-            //
-            // goal.on('result', function (result) {
-            //     console.log('Final Result: ' + result.sequence);
-            //     setLocalResult(result.sequence); //TODO vérifier le type de result pour transformer en string
-            // });
-
-            // Nettoyage lors du démontage
-            return () => {
-                //TODO : unsubscribe
-            };
+            setGoal(new ROSLIB.Goal({
+                actionClient: localClient,
+                goalMessage: localJson.GoalMessage
+            }));
         } else {
             console.log('ROS n\'est pas encore prêt.');
         }
-    }, []);
 
-    function onHandleClick() {
-        if (goal) {
-            goal.send();
-        } else {
-            console.log('goal n\'est pas encore prêt.');
+        // Nettoyage lors du démontage
+        return () => {
+            //todo : unsubscribe
         }
+        }, []);
+
+        function onHandleClick() {
+            if (goal) {
+                goal.on('feedback', function (feedback) {
+                    console.log('Feedback: ' + feedback.sequence);
+                    setLocalFeedBack(feedback.sequence); //TODO vérifier le type de feedback pour transformer en string
+                });
+
+                goal.on('result', function (result) {
+                    console.log('Final Result: ' + result.sequence);
+                    setLocalResult(result.sequence); //TODO vérifier le type de result pour transformer en string
+                });
+                goal.send();
+            } else {
+                console.log('goal n\'est pas encore prêt.');
+            }
+        }
+
+        return (
+            <div>
+                <button
+                    onClick={onHandleClick}
+                    className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+                >
+                    Action {localJson.ServiceName}
+                </button>
+
+                {localFeedBack ? (
+                    <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
+                        <p>Result: {localFeedBack}</p>
+                    </div>
+                ) : (
+                    <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
+                        <p></p>
+                    </div>
+                )}
+
+                {localResult ? (
+                    <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
+                        <p>Result: {localResult}</p>
+                    </div>
+                ) : (
+                    <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
+                        <p></p>
+                    </div>
+                )}
+            </div>
+        );
     }
-
-    return (
-        <div>
-            <button
-                onClick={onHandleClick}
-                className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
-            >
-                Action {localJson.ServiceName}
-            </button>
-
-            {localFeedBack ? (
-                <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>Result: {localFeedBack}</p>
-                </div>
-            ) : (
-                <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
-                    <p></p>
-                </div>
-            )}
-
-            {localResult ? (
-                <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>Result: {localResult}</p>
-                </div>
-            ) : (
-                <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
-                    <p></p>
-                </div>
-            )}
-        </div>
-    );
-}

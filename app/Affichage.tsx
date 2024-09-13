@@ -17,10 +17,10 @@ export default function HomePage() {
     }, []);
 
     return (
-        <div>
+        <div className="grid grid-cols-5 gap-4 p-5">
             {layout && (
                 Object.entries(layout).map(([serviceKey, serviceValue]) => (
-                    <div key={serviceKey} style={{ margin: '20px' }}>
+                    <div key={serviceKey}>
                         {/* Vérifier le type et rendre le bon composant */}
                         {serviceValue.type === 'service' && (
                             <>
