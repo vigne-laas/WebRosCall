@@ -42,7 +42,7 @@ export default function HomePage() {
 
                         {serviceValue.type === 'action' && (
                             <>
-                                <RosElementAction json={serviceValue} actionName={serviceKey} />
+                                <RosElementAction json={serviceValue} serviceKey={serviceKey} />
                             </>
                         )}
                     </div>

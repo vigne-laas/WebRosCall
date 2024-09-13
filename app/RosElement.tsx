@@ -92,7 +92,7 @@ export function RosElementTopicEcho(json) {
 
     function onHandleClick() {
         if (localClient) {
-            localClient.subscribe((message: any) => {
+            localClient.subscribe((message: ROSLIB.message) => {
                 setLocalMessage(message);
                 console.log('Received message on ' + localClient.name + ': ' + message.percentage);
             });
@@ -161,10 +161,9 @@ export function RosElementTopicPub(json) {
         } else {
             console.log('localClient n\'est pas encore prêt.');
         }
+        setLocalMessage('')
+        console.log(localMessage)
     }
-
-    setLocalMessage('')
-    console.log(localMessage)
 
     useEffect(() => {
         if (localMessage) {
@@ -195,13 +194,13 @@ export function RosElementTopicPub(json) {
     );
 }
 
-export function RosElementAction(json, actionName) {
+export function RosElementAction({json,serviceKey}) {
     const [goal, setGoal] = useState<ROSLIB.Goal>(null);
     const [localFeedBack, setLocalFeedBack] = useState<string>('');
     const [localResult, setLocalResult] = useState<string>('');
 
     const {ros} = useROS();
-    const localJson = json.json;
+    const localJson = json;
 
     useEffect(() => {
         if (ros) {
@@ -248,7 +247,7 @@ export function RosElementAction(json, actionName) {
                     onClick={onHandleClick}
                     className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
                 >
-                    Action {actionName}
+                    Action {serviceKey}
                 </button>
 
                 {localFeedBack ? (
