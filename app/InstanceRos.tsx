@@ -9,6 +9,7 @@ export const useROS = () => {
     return useContext(ROSContext);
 };
 
+// @ts-ignore
 export const ROSProvider = ({ children }) =>  {
     const [ros, setRos] = useState<ROSLIB.Ros | null>(null);
 
@@ -18,7 +19,7 @@ export const ROSProvider = ({ children }) =>  {
         const localRos = new ROSLIB.Ros({url: 'ws://localhost:9999'});
 
         localRos.on('connection', () => console.log('Connexion réussie (local)'));
-        localRos.on('error', (error) => console.error('Erreur de connexion:', error));
+        localRos.on('error', (error: ROSLIB.error) => console.error('Erreur de connexion:', error));
         localRos.on('close', () => console.log('Connexion fermée'));
         setRos(localRos);
 
@@ -30,8 +31,11 @@ export const ROSProvider = ({ children }) =>  {
     }, []);
 
     return (
-        <ROSContext.Provider value={{ ros }}>
+        <div>
+        <ROSContext.Provider value={{ros}}>
+
             {children}
         </ROSContext.Provider>
+        </div>
     );
 }
