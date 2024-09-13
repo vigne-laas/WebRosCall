@@ -28,7 +28,7 @@ export function RosElementService(json) {
     }, []);
 
     function onHandleClick() {
-        var request = new ROSLIB.ServiceRequest(json.Req);
+        const request = new ROSLIB.ServiceRequest(json.Req);
 
         if (localClient) {
             localClient.callService(request, function (result) {
@@ -77,7 +77,7 @@ export function RosElementTopicEcho(json) {
 
             setLocalClient(new ROSLIB.Topic({
                 ros: ros,
-                name: localJson.ServiceName,
+                name: localJson.TopicName,
                 mesageType: localJson.MessageType
             }));
 
@@ -114,7 +114,7 @@ export function RosElementTopicEcho(json) {
                 onClick={onHandleClick}
                 className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
             >
-                Topic echo {localJson.ServiceName}
+                Topic echo {localJson.TopicName}
             </button>
 
             {localMessage ? (
@@ -142,7 +142,7 @@ export function RosElementTopicPub(json) {
 
             setLocalClient(new ROSLIB.Topic({
                 ros: ros,
-                name: localJson.ServiceName,
+                name: localJson.TopicName,
                 mesageType: localJson.MessageType
             }));
 
@@ -163,6 +163,9 @@ export function RosElementTopicPub(json) {
         }
     }
 
+    setLocalMessage('')
+    console.log(localMessage)
+
     useEffect(() => {
         if (localMessage) {
             console.log('localMessage a changé:', localMessage);
@@ -176,7 +179,7 @@ export function RosElementTopicPub(json) {
                 onClick={onHandleClick}
                 className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
             >
-                Topic publish {localJson.ServiceName}
+                Topic publish {localJson.TopicName}
             </button>
 
             {localMessage ? (
@@ -192,7 +195,7 @@ export function RosElementTopicPub(json) {
     );
 }
 
-export function RosElementAction(json) {
+export function RosElementAction(json, actionName) {
     const [goal, setGoal] = useState<ROSLIB.Goal>(null);
     const [localFeedBack, setLocalFeedBack] = useState<string>('');
     const [localResult, setLocalResult] = useState<string>('');
@@ -245,7 +248,7 @@ export function RosElementAction(json) {
                     onClick={onHandleClick}
                     className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
                 >
-                    Action {localJson.ServiceName}
+                    Action {actionName}
                 </button>
 
                 {localFeedBack ? (

@@ -27,12 +27,12 @@
   },
   "topicEcho": {
     "type": "topic_echo",
-    "ServiceName": "/battery_state",
+    "TopicName": "/battery_state",
     "MessageType": "sensor_msgs/BatteryState"
   },
   "topicPub": {
     "type": "topic_pub",
-    "ServiceName": "/battery_state",
+    "TopicName": "/battery_state",
     "MessageType": "sensor_msgs/BatteryState",
     "Message": {
       "voltage": 0,
