@@ -1,14 +1,16 @@
 'use client'
 import {useROS} from "@/app/InstanceRos";
 import {useEffect, useState} from "react";
+// @ts-ignore
 import ROSLIB from 'roslib';
 
-export function RosElementService(json) {
+export function RosElementService(param) {
     const [localClient, setLocalClient] = useState<ROSLIB.Service>(null);
     const [localMessage, setLocalMessage] = useState<string>('');
 
     const {ros} = useROS();
-    const localJson = json.json;
+    const localJson = param.param;
+    console.log(localJson)
 
     useEffect(() => {
         if (ros) {
@@ -28,7 +30,7 @@ export function RosElementService(json) {
     }, []);
 
     function onHandleClick() {
-        const request = new ROSLIB.ServiceRequest(json.Req);
+        const request = new ROSLIB.ServiceRequest(localJson.Req);
 
         if (localClient) {
             localClient.callService(request, function (result) {
@@ -54,7 +56,7 @@ export function RosElementService(json) {
 
             {localMessage ? (
                 <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>Result: {localMessage}</p>
+                    <p>{JSON.stringify(localMessage)}</p>
                 </div>
             ) : (
                 <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
@@ -65,12 +67,13 @@ export function RosElementService(json) {
     );
 }
 
-export function RosElementTopicEcho(json) {
+export function RosElementTopicEcho(param) {
     const [localClient, setLocalClient] = useState<ROSLIB.Topic>(null);
     const [localMessage, setLocalMessage] = useState<string>('');
 
     const {ros} = useROS();
-    const localJson = json.json;
+    const localJson = param.param;
+    console.log(localJson);
 
     useEffect(() => {
         if (ros) {
@@ -94,19 +97,12 @@ export function RosElementTopicEcho(json) {
         if (localClient) {
             localClient.subscribe((message: ROSLIB.message) => {
                 setLocalMessage(message);
-                console.log('Received message on ' + localClient.name + ': ' + message.percentage);
+                console.log("message", message)
             });
         } else {
             console.log('localClient n\'est pas encore prêt.');
         }
     }
-
-    useEffect(() => {
-        if (localMessage) {
-            console.log('localMessage a changé:', localMessage);
-            // Vous pouvez exécuter d'autres actions ici si nécessaire
-        }
-    }, [localMessage]); // Dépendance à localMessage pour réagir à ses changements
 
     return (
         <div>
@@ -119,7 +115,7 @@ export function RosElementTopicEcho(json) {
 
             {localMessage ? (
                 <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>Result: {localMessage}</p>
+                    <p>{JSON.stringify(localMessage)}</p>
                 </div>
             ) : (
                 <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
@@ -130,12 +126,12 @@ export function RosElementTopicEcho(json) {
     );
 }
 
-export function RosElementTopicPub(json) {
+export function RosElementTopicPub(param) {
     const [localClient, setLocalClient] = useState<ROSLIB.Topic>(null);
-    const [localMessage, setLocalMessage] = useState<string>('');
 
     const {ros} = useROS();
-    const localJson = json.json;
+    const localJson = param.param;
+    console.log(localJson)
 
     useEffect(() => {
         if (ros) {
@@ -157,20 +153,12 @@ export function RosElementTopicPub(json) {
 
     function onHandleClick() {
         if (localClient) {
-            localClient.publish(json.Message);
+            localClient.publish(localJson.Message);
+            console.log("json.Message", localJson.Message)
         } else {
             console.log('localClient n\'est pas encore prêt.');
         }
-        setLocalMessage('')
-        console.log(localMessage)
     }
-
-    useEffect(() => {
-        if (localMessage) {
-            console.log('localMessage a changé:', localMessage);
-            // Vous pouvez exécuter d'autres actions ici si nécessaire
-        }
-    }, [localMessage]); // Dépendance à localMessage pour réagir à ses changements
 
     return (
         <div>
@@ -180,27 +168,18 @@ export function RosElementTopicPub(json) {
             >
                 Topic publish {localJson.TopicName}
             </button>
-
-            {localMessage ? (
-                <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>Result: {localMessage}</p>
-                </div>
-            ) : (
-                <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
-                    <p></p>
-                </div>
-            )}
         </div>
     );
 }
 
-export function RosElementAction({json,serviceKey}) {
+export function RosElementAction({param,serviceKey}) {
     const [goal, setGoal] = useState<ROSLIB.Goal>(null);
     const [localFeedBack, setLocalFeedBack] = useState<string>('');
     const [localResult, setLocalResult] = useState<string>('');
 
     const {ros} = useROS();
-    const localJson = json;
+    const localJson = param;
+    console.log(localJson);
 
     useEffect(() => {
         if (ros) {
@@ -225,15 +204,17 @@ export function RosElementAction({json,serviceKey}) {
         }, []);
 
         function onHandleClick() {
+            setLocalResult('');
+            setLocalFeedBack('');
             if (goal) {
                 goal.on('feedback', function (feedback) {
-                    console.log('Feedback: ' + feedback.sequence);
-                    setLocalFeedBack(feedback.sequence); //TODO vérifier le type de feedback pour transformer en string
+                    console.log('Feedback: ' + feedback);
+                    setLocalFeedBack(feedback.output); //TODO vérifier le type de feedback pour transformer en string
                 });
 
                 goal.on('result', function (result) {
-                    console.log('Final Result: ' + result.sequence);
-                    setLocalResult(result.sequence); //TODO vérifier le type de result pour transformer en string
+                    console.log('Final Result: ' + result);
+                    setLocalResult(result.result_message); //TODO vérifier le type de result pour transformer en string
                 });
                 goal.send();
             } else {
@@ -252,7 +233,7 @@ export function RosElementAction({json,serviceKey}) {
 
                 {localFeedBack ? (
                     <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                        <p>Result: {localFeedBack}</p>
+                        <p>{JSON.stringify(localFeedBack)}</p>
                     </div>
                 ) : (
                     <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
@@ -262,7 +243,7 @@ export function RosElementAction({json,serviceKey}) {
 
                 {localResult ? (
                     <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                        <p>Result: {localResult}</p>
+                        <p>{JSON.stringify(localResult)}</p>
                     </div>
                 ) : (
                     <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">

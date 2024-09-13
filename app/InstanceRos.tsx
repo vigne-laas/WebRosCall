@@ -1,4 +1,5 @@
 'use client'
+// @ts-ignore
 import ROSLIB from 'roslib';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
@@ -14,7 +15,7 @@ export const ROSProvider = ({ children }) =>  {
     useEffect(() => {
 
         // Utiliser l'instance ROS fournie, sinon créer une nouvelle instance
-        const localRos = new ROSLIB.Ros({url: 'ws://localhost:9090'});
+        const localRos = new ROSLIB.Ros({url: 'ws://localhost:9999'});
 
         localRos.on('connection', () => console.log('Connexion réussie (local)'));
         localRos.on('error', (error) => console.error('Erreur de connexion:', error));

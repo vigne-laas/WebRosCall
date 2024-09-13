@@ -27,35 +27,15 @@
   },
   "topicEcho": {
     "type": "topic_echo",
-    "TopicName": "/battery_state",
-    "MessageType": "sensor_msgs/BatteryState"
+    "TopicName": "/chatter",
+    "MessageType": "std_msgs/String"
   },
   "topicPub": {
     "type": "topic_pub",
-    "TopicName": "/battery_state",
-    "MessageType": "sensor_msgs/BatteryState",
+    "TopicName": "/chatter",
+    "MessageType": "std_msgs/String",
     "Message": {
-      "voltage": 0,
-      "current": 0,
-      "charge": 0,
-      "capacity": 0,
-      "design_capacity": 0,
-      "percentage": 0,
-      "power_supply_status": 0,
-      "power_supply_health": 0,
-      "power_supply_technology": 0,
-      "present": 0,
-      "cell_voltage": [
-        0
-      ],
-      "location": "",
-      "serial_number": "",
-      "cycle_count": 0,
-      "temperature": 0,
-      "design_voltage": 0,
-      "design_capacity_warning": 0,
-      "design_capacity_low": 0,
-      "capacity_percentage": 0
+      "data": "test"
     }
   }
 }
