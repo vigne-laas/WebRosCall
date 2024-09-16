@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 // @ts-ignore
 import ROSLIB from 'roslib';
 import {ServiceValueInterface} from '@/app/interface';
-import styles from './style.module.css'
+import './style.css'
 
 
 export function RosElementService({param, serviceKey}: { param: ServiceValueInterface, serviceKey: string }) {
@@ -224,7 +224,7 @@ export function RosElementAction({param, serviceKey}: { param: ServiceValueInter
         <div>
             <button
                 onClick={onHandleClick}
-                className="actionBouton bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+                className="bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300 actionBouton"
             >
                 Action {serviceKey}
             </button>
