@@ -19,10 +19,10 @@ export default function HomePage() {
     }, []);
 
     return (
-        <div className="grid grid-cols-5 gap-4 p-5">
+        <div className="grid grid-cols-5 gap-4 p-5 h-full">
             {layout && (
                 Object.entries(layout).map(([serviceKey, serviceValue]) => (
-                    <div key={serviceKey}>
+                    <div key={serviceKey} className='w-full h-full'>
                         {/* Vérifier le type et rendre le bon composant */}
                         {serviceValue.type === 'service' && (
                             <>

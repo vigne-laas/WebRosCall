@@ -51,17 +51,17 @@ export function RosElementService({param, serviceKey}: { param: ServiceValueInte
         <div>
             <button
                 onClick={onHandleClick}
-                className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+                className="bg-gray-200 w-full text-2xl text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
             >
                 Call Service {serviceKey}
             </button>
 
             {localMessage ? (
-                <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>{JSON.stringify(localMessage)}</p>
+                <div className="bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                    <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localMessage, null, 2)}</p>
                 </div>
             ) : (
-                <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
+                <div className="bg-gray-800 w-full h-9 text-white flex items-center justify-center rounded-md">
                     <p></p>
                 </div>
             )}
@@ -104,17 +104,17 @@ export function RosElementTopicEcho({param, serviceKey}: { param: ServiceValueIn
     return (
         <div>
             <button
-                className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+                className="bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
             >
                 Topic echo {serviceKey}
             </button>
 
             {localMessage ? (
-                <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>{JSON.stringify(localMessage)}</p>
+                <div className="bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                    <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localMessage, null, 2)}</p>
                 </div>
             ) : (
-                <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
+                <div className="bg-gray-800 w-full h-9 text-white flex items-center justify-center rounded-md">
                     <p></p>
                 </div>
             )}
@@ -160,7 +160,7 @@ export function RosElementTopicPub({param, serviceKey}: { param: ServiceValueInt
         <div>
             <button
                 onClick={onHandleClick}
-                className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+                className="bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
             >
                 Topic publish {serviceKey}
             </button>
@@ -223,27 +223,27 @@ export function RosElementAction({param, serviceKey}: { param: ServiceValueInter
         <div>
             <button
                 onClick={onHandleClick}
-                className="bg-gray-200 w-52 text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+                className="bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
             >
                 Action {serviceKey}
             </button>
 
             {localFeedBack ? (
-                <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>{JSON.stringify(localFeedBack)}</p>
+                <div className="bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                    <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localFeedBack, null, 2)}</p>
                 </div>
             ) : (
-                <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
+                <div className="bg-gray-800 w-full h-12 text-white flex items-center justify-center rounded-md">
                     <p></p>
                 </div>
             )}
 
             {localResult ? (
-                <div className="bg-gray-800 text-white w-52 h-12 flex items-center justify-center rounded-md">
-                    <p>{JSON.stringify(localResult)}</p>
+                <div className="bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                    <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localResult, null, 2)}</p>
                 </div>
             ) : (
-                <div className="bg-gray-800 w-52 h-9 text-white flex items-center justify-center rounded-md">
+                <div className="bg-gray-800 w-full h-12 text-white flex items-center justify-center rounded-md">
                     <p></p>
                 </div>
             )}
