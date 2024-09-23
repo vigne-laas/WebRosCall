@@ -1,24 +1,31 @@
 .serviceBouton{
-
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
 
 .serviceMessage{
-
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 
-.topiceEchoBouton{
-
+.topicEchoBouton{
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
 
 .topicEchoMessage{
-
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 
 .topicPublish{
+    border-radius: 0.5rem;
 
 }
 
 .actionBouton{
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 
 }
 
@@ -27,5 +34,6 @@
 }
 
 .actionResult{
-
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }

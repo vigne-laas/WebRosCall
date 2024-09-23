@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import ROSLIB from 'roslib';
 import {ServiceValueInterface} from '@/app/interface';
 import './style.css'
+import { Button, ButtonGroup } from "@nextui-org/button";
 
 
 export function RosElementService({param, serviceKey}: { param: ServiceValueInterface, serviceKey: string }) {
@@ -36,6 +37,7 @@ export function RosElementService({param, serviceKey}: { param: ServiceValueInte
         const request = new ROSLIB.ServiceRequest(localJson.Req);
 
         if (localClient) {
+            setLocalMessage("Appel du service effectué")
             localClient.callService(request, function (result: ROSLIB.result) {
                 console.log('Result for service call on '
                     + localClient.name
@@ -49,20 +51,20 @@ export function RosElementService({param, serviceKey}: { param: ServiceValueInte
     }
 
     return (
-        <div>
-            <button
-                onClick={onHandleClick}
-                className="serviceBouton bg-gray-200 w-full text-2xl text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+        <div className="flex flex-col">
+            <Button radius="none"
+                onPress={onHandleClick}
+                className="serviceBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full"
             >
                 Call Service {serviceKey}
-            </button>
+            </Button>
 
             {localMessage ? (
-                <div className="serviceMessage p-4 bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                <div className="serviceMessage p-4 bg-gray-700 text-white w-full h-auto flex items-center justify-center">
                     <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localMessage, null, 2)}</p>
                 </div>
             ) : (
-                <div className="serviceMessage p-4 bg-gray-800 w-full h-12 text-white flex items-center justify-center rounded-md">
+                <div className="serviceMessage p-4 bg-gray-700 w-full text-white flex items-center justify-center">
                     <p></p>
                 </div>
             )}
@@ -85,6 +87,7 @@ export function RosElementTopicEcho({param, serviceKey}: { param: ServiceValueIn
                 ros: ros,
                 name: localJson.TopicName,
                 mesageType: localJson.MessageType
+            
             });
 
             localClient.subscribe((message: ROSLIB.message) => {
@@ -103,19 +106,19 @@ export function RosElementTopicEcho({param, serviceKey}: { param: ServiceValueIn
 
 
     return (
-        <div>
-            <button
-                className="topicEchoBouton bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
+        <div className="flex flex-col">
+            <Button radius="none"
+                className="topicEchoBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full"
             >
                 Topic echo {serviceKey}
-            </button>
+            </Button>
 
             {localMessage ? (
-                <div className="topicEchoMessage p-4 bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                <div className="topicEchoMessage p-4 bg-gray-700 text-white w-full h-auto flex items-center justify-center">
                     <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localMessage, null, 2)}</p>
                 </div>
             ) : (
-                <div className="topicEchoMessage p-4 bg-gray-800 w-full h-12 text-white flex items-center justify-center rounded-md">
+                <div className="topicEchoMessage p-4 bg-gray-700 w-full h-12 text-white flex items-center justify-center">
                     <p></p>
                 </div>
             )}
@@ -158,13 +161,12 @@ export function RosElementTopicPub({param, serviceKey}: { param: ServiceValueInt
     }
 
     return (
-        <div>
-            <button
+        <div className="flex flex-col">
+            <Button radius="none"
                 onClick={onHandleClick}
-                className="topicPublish bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300"
-            >
+                className="topicPublish text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full">
                 Topic publish {serviceKey}
-            </button>
+            </Button>
         </div>
     );
 }
@@ -203,7 +205,7 @@ export function RosElementAction({param, serviceKey}: { param: ServiceValueInter
 
     function onHandleClick() {
         setLocalResult('');
-        setLocalFeedBack('');
+        setLocalFeedBack('Action demandé');
         if (goal) {
             goal.on('feedback', function (feedback: ROSLIB.feedback) {
                 console.log('Feedback: ' + feedback);
@@ -221,30 +223,29 @@ export function RosElementAction({param, serviceKey}: { param: ServiceValueInter
     }
 
     return (
-        <div>
-            <button
+        <div className="flex flex-col">
+            <Button radius="none"
                 onClick={onHandleClick}
-                className="bg-gray-200 text-2xl w-full text-black rounded-md px-4 py-2 hover:bg-gray-300 transition duration-300 actionBouton"
-            >
+                className="actionBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full">
                 Action {serviceKey}
-            </button>
+            </Button>
 
             {localFeedBack ? (
-                <div className="actionFeedback p-4 bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                <div className="actionFeedback p-4 bg-gray-700 text-white w-full h-auto flex items-center justify-center">
                     <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localFeedBack, null, 2)}</p>
                 </div>
             ) : (
-                <div className="actionFeedback p-4 bg-gray-800 w-full h-12 text-white flex items-center justify-center rounded-md">
+                <div className="actionFeedback p-4 bg-gray-700 w-full h-12 text-white flex items-center justify-center">
                     <p></p>
                 </div>
             )}
 
             {localResult ? (
-                <div className="actionResult p-4 bg-gray-800 text-white w-full h-auto flex items-center justify-center rounded-md">
+                <div className="actionResult p-4 bg-gray-700 text-white w-full h-auto flex items-center justify-center">
                     <p className='break-words whitespace-pre-wrap'>{JSON.stringify(localResult, null, 2)}</p>
                 </div>
             ) : (
-                <div className="actionResult p-4 bg-gray-800 w-full h-12 text-white flex items-center justify-center rounded-md">
+                <div className="actionResult p-4 bg-gray-700 w-full h-12 text-white flex items-center justify-center">
                     <p></p>
                 </div>
             )}
