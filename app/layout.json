@@ -3,15 +3,16 @@
     {
       "instanceName": "pr2",
       "url": "ws://localhost:9090",
-      "couleur": "gris"
+      "couleur": "rouge"
     },
     {
       "instanceName": "pepper",
       "url": "ws://localhost:9999",
       "couleur": "bleu"
     }],
-  "layout":[
-    [
+  "layout":[{
+    "name":"test1",
+    "content":[
      {
       "name": "servicePeper2",
       "type": "service",
@@ -60,7 +61,9 @@
       "Message": {
         "data": "test"
       }
-    }],[
+    }]},{
+      "name":"test pouic",
+      "content":[
     {
       "name":"service1",
       "type": "service",
@@ -109,6 +112,6 @@
       "Message": {
         "data": "test"
       }
-    }]
+    }]}
   ]
 }

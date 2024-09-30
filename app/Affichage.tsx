@@ -12,12 +12,6 @@ export default function HomePage() {
     const [rosListUsefull, setRosListUsefull] = useState<Map<string, ROSLIB.Ros>>(null);
     const isTimer = useRef(null)
 
-    if(rosList){
-        console.log(rosList)
-        Array.from(rosList.entries()).map((value, key)=>(console.log("value compil",value,key)))
-        Array.from(rosList.keys()).map((key)=>(console.log("key compil",key)))
-    }
-
     function color(boolean){
         if(boolean) return "green";
         return "red"
@@ -30,15 +24,13 @@ export default function HomePage() {
 
     isTimer.current = setInterval(() => {
         setRosListUsefull(rosList)
-      }, 10000);
+      }, 5000);
 
     return (
         <div className='h-screen'>
             <div className='grid grid-cols-5 h-6'>
                 {rosListUsefull && Array.from(rosListUsefull.keys()).map((key:string)=>{
                     let ros = rosList.get(key);
-                    console.log(ros)
-                    console.log(rosList)
                     let style = {
                         background:color(ros.isConnected)
                     }

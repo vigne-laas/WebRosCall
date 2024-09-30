@@ -13,6 +13,8 @@ function style(color:string){
             return "bg-default-500"
         case "bleu":
             return "bg-primary-500"
+        case "rouge":
+            return "bg-danger-500"
     }
 }
 
