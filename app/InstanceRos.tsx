@@ -1,7 +1,7 @@
 'use client'
-// @ts-ignore
 import ROSLIB from 'roslib';
 import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
+import data from './layout.json'
 
 const ROSContext = createContext(null);
 
@@ -11,26 +11,48 @@ export const useROS = () => {
 
 // @ts-ignore
 export const ROSProvider = ({ children }) =>  {
-    const [ros, setRos] = useState<ROSLIB.Ros | null>(null);
-    const instanceRos = useRef<ROSLIB.Ros>(null);
+    const [rosList, setRosList] = useState<Map<string, ROSLIB.Ros> | null>(null);
+    const [rosParamList, setParamRosList] = useState<Map<string, string> | null>(null);
+    const rosInstanceList = useRef<Map<string, ROSLIB.Ros>>(null);
+
+    const rosInfo = data.ros;
+
+    const updateRosList = (key: string, value: ROSLIB.Ros) => {
+        setRosList((prevRosList) => {
+            const newMap = new Map(prevRosList);
+            newMap.set(key, value);
+            return newMap;
+        });
+    };
+
+    const updateParamRosList = (key: string, value:string) => {
+        setParamRosList((prevParamRosList) => {
+            const newMap = new Map(prevParamRosList);
+            newMap.set(key, value);
+            return newMap;
+        });
+    };
+
 
     useEffect(() => {
-
-        if(!instanceRos.current) {
-            const localRos = new ROSLIB.Ros({url: 'ws://localhost:9090'});
-
-            localRos.on('connection', () => console.log('Connexion réussie (local)'));
-            localRos.on('error', (error: ROSLIB.error) => console.error('Erreur de connexion:', error));
-            localRos.on('close', () => console.log('Connexion fermée'));
-            setRos(localRos);
-            instanceRos.current = localRos
+        if(!rosInstanceList.current && !rosList) {
+            let localRosList = new Map();
+            rosInfo.map((ros)=>{
+                const localRos = new ROSLIB.Ros({url: ros.url});
+                localRos.on('connection', () => console.log('Connexion réussie (local)'));
+                localRos.on('error', (error: ROSLIB.Message) => console.error('Erreur de connexion:', error));
+                localRos.on('close', () => console.log('Connexion fermée')); 
+                updateRosList(ros.instanceName,localRos)
+                localRosList.set(ros.instanceName,localRos)
+                updateParamRosList(ros.instanceName,ros.couleur);
+            })
+        rosInstanceList.current = localRosList;
         }
-    }, []);
+    }, [rosList]);
 
     return (
         <div>
-        <ROSContext.Provider value={{ros}}>
-
+        <ROSContext.Provider value={{rosList, rosParamList}}>
             {children}
         </ROSContext.Provider>
         </div>

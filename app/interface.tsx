@@ -3,6 +3,7 @@
 export interface ServiceValueInterface {
     type: 'service' | 'topic_echo' | 'topic_pub' | 'action';
     ServiceName?: string;
+    ros:string;
     ServerName?: string;
     TopicName?: string;
     ServiceType?: string;

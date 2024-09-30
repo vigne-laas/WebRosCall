@@ -7,17 +7,35 @@ import {ServiceValueInterface} from '@/app/interface';
 import './style.css'
 import { Button, ButtonGroup } from "@nextui-org/button";
 
+function style(color:string){
+    switch (color) {
+        case "gris":
+            return "bg-default-500"
+        case "bleu":
+            return "bg-primary-500"
+    }
+}
 
 export function RosElementService({param, serviceKey}: { param: ServiceValueInterface, serviceKey: string }) {
     const [localClient, setLocalClient] = useState<ROSLIB.Service>(null);
     const [localMessage, setLocalMessage] = useState<string>('');
-
-    const {ros} = useROS();
+    const [ros, setRos] = useState<ROSLIB.Ros>(null);
+    const [color, setColor] = useState<string>(null);
     const localJson = param;
-    console.log(localJson)
+
+    const {rosList, rosParamList} = useROS();
+    // console.log(localJson)
+
+    useEffect(() => {
+        if(rosList){
+            setRos(rosList.get(param.ros))
+            setColor(rosParamList.get(param.ros))
+        }
+    }, [rosList,rosParamList]);
 
     useEffect(() => {
         if (ros) {
+            console.log('initiation de localClient')
             setLocalClient(new ROSLIB.Service({
                 ros: ros,
                 name: localJson.ServiceName,
@@ -31,14 +49,14 @@ export function RosElementService({param, serviceKey}: { param: ServiceValueInte
         } else {
             console.log('ROS n\'est pas encore prêt.');
         }
-    }, []);
+    }, [ros]);
 
     function onHandleClick() {
         const request = new ROSLIB.ServiceRequest(localJson.Req);
 
         if (localClient) {
             setLocalMessage("Appel du service effectué")
-            localClient.callService(request, function (result: ROSLIB.result) {
+            localClient.callService(request, function (result: ROSLIB.Result) {
                 console.log('Result for service call on '
                     + localClient.name
                     + ': '
@@ -54,7 +72,7 @@ export function RosElementService({param, serviceKey}: { param: ServiceValueInte
         <div className="flex flex-col">
             <Button radius="none"
                 onPress={onHandleClick}
-                className="serviceBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full"
+                className={`serviceBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full ${color ? style(color) : ''}`}
             >
                 Call Service {serviceKey}
             </Button>
@@ -73,11 +91,20 @@ export function RosElementService({param, serviceKey}: { param: ServiceValueInte
 }
 
 export function RosElementTopicEcho({param, serviceKey}: { param: ServiceValueInterface, serviceKey: string }) {
-    const [localMessage, setLocalMessage] = useState<string>('');
-
-    const {ros} = useROS();
+    const [localMessage, setLocalMessage] = useState<ROSLIB.Message>('');
+    const [ros, setRos] = useState<ROSLIB.Ros>(null);
+    const [color, setColor] = useState<string>(null);
     const localJson = param;
-    console.log(localJson);
+
+    const {rosList, rosParamList} = useROS();
+    // console.log(localJson)
+
+    useEffect(() => {
+        if(rosList){
+            setRos(rosList.get(param.ros))
+            setColor(rosParamList.get(param.ros))
+        }
+    }, [rosList,rosParamList]);
 
     useEffect(() => {
         if (ros) {
@@ -86,11 +113,11 @@ export function RosElementTopicEcho({param, serviceKey}: { param: ServiceValueIn
             const localClient = new ROSLIB.Topic({
                 ros: ros,
                 name: localJson.TopicName,
-                mesageType: localJson.MessageType
+                messageType: localJson.MessageType
             
             });
 
-            localClient.subscribe((message: ROSLIB.message) => {
+            localClient.subscribe((message: ROSLIB.Message) => {
                 setLocalMessage(message);
                 console.log("message", message)
             });
@@ -108,7 +135,7 @@ export function RosElementTopicEcho({param, serviceKey}: { param: ServiceValueIn
     return (
         <div className="flex flex-col">
             <Button radius="none"
-                className="topicEchoBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full"
+                className={`topicEchoBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full ${color ? style(color) : ''}`}
             >
                 Topic echo {serviceKey}
             </Button>
@@ -128,18 +155,28 @@ export function RosElementTopicEcho({param, serviceKey}: { param: ServiceValueIn
 
 export function RosElementTopicPub({param, serviceKey}: { param: ServiceValueInterface, serviceKey: string }) {
     const [localClient, setLocalClient] = useState<ROSLIB.Topic>(null);
-
-    const {ros} = useROS();
+    const [ros, setRos] = useState<ROSLIB.Ros>(null);
+    const [color, setColor] = useState<string>(null);
     const localJson = param;
-    console.log(localJson)
+
+    const {rosList, rosParamList} = useROS();
+    // console.log(localJson)
+
+    useEffect(() => {
+        if(rosList){
+            setRos(rosList.get(param.ros))
+            setColor(rosParamList.get(param.ros))
+        }
+    }, [rosList,rosParamList]);
 
     useEffect(() => {
         if (ros) {
+            console.log('initiation de localClient')
 
             setLocalClient(new ROSLIB.Topic({
                 ros: ros,
                 name: localJson.TopicName,
-                mesageType: localJson.MessageType
+                messageType: localJson.MessageType
             }));
 
             // Nettoyage lors du démontage
@@ -164,7 +201,7 @@ export function RosElementTopicPub({param, serviceKey}: { param: ServiceValueInt
         <div className="flex flex-col">
             <Button radius="none"
                 onClick={onHandleClick}
-                className="topicPublish text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full">
+                className={`topicPublish text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full ${color ? style(color) : ''}`}>
                 Topic publish {serviceKey}
             </Button>
         </div>
@@ -175,10 +212,19 @@ export function RosElementAction({param, serviceKey}: { param: ServiceValueInter
     const [goal, setGoal] = useState<ROSLIB.Goal>(null);
     const [localFeedBack, setLocalFeedBack] = useState<string>('');
     const [localResult, setLocalResult] = useState<string>('');
-
-    const {ros} = useROS();
+    const [ros, setRos] = useState<ROSLIB.Ros>(null);
+    const [color, setColor] = useState<string>(null);
     const localJson = param;
-    console.log(localJson);
+
+    const {rosList, rosParamList} = useROS();
+    // console.log(localJson)
+
+    useEffect(() => {
+        if(rosList){
+            setRos(rosList.get(param.ros))
+            setColor(rosParamList.get(param.ros))
+        }
+    }, [rosList,rosParamList]);
 
     useEffect(() => {
         if (ros) {
@@ -207,12 +253,12 @@ export function RosElementAction({param, serviceKey}: { param: ServiceValueInter
         setLocalResult('');
         setLocalFeedBack('Action demandé');
         if (goal) {
-            goal.on('feedback', function (feedback: ROSLIB.feedback) {
+            goal.on('feedback', function (feedback: ROSLIB.Feedback) {
                 console.log('Feedback: ' + feedback);
                 setLocalFeedBack(feedback.output);
             });
 
-            goal.on('result', function (result: ROSLIB.result) {
+            goal.on('result', function (result: ROSLIB.Result) {
                 console.log('Final Result: ' + result);
                 setLocalResult(result.result_message);
             });
@@ -226,7 +272,7 @@ export function RosElementAction({param, serviceKey}: { param: ServiceValueInter
         <div className="flex flex-col">
             <Button radius="none"
                 onClick={onHandleClick}
-                className="actionBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full">
+                className={`actionBouton text-2xl w-full px-4 py-2 break-words whitespace-pre-wrap h-full ${color ? style(color) : ''}`}>
                 Action {serviceKey}
             </Button>
 

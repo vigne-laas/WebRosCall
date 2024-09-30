@@ -1,0 +1,114 @@
+{
+  "ros":[
+    {
+      "instanceName": "pr2",
+      "url": "ws://localhost:9090",
+      "couleur": "gris"
+    },
+    {
+      "instanceName": "pepper",
+      "url": "ws://localhost:9999",
+      "couleur": "bleu"
+    }],
+  "layout":[
+    [
+     {
+      "name": "servicePeper2",
+      "type": "service",
+      "ros":"pepper",
+      "ServiceName": "topic_name",
+      "ServiceType": "type/topic_type",
+      "Req": {
+        "a": 1,
+        "b": 2
+      }
+    },
+    {
+      "name": "servicePepper2",
+      "type": "service",
+      "ros":"pepper",
+      "ServiceName": "topic",
+      "ServiceType": "type/topic_type",
+      "Req": {
+        "a": 1,
+        "b": 3
+      }
+    },
+    {
+      "name":"actionPepper",
+      "type": "action",
+      "ros":"pepper",
+      "ServerName": "/bash_action_server",
+      "ActionName": "bash_action/BashAction",
+      "GoalMessage": {
+          "action_name": "topiclist"
+      }
+    },
+    {
+      "name":"topicPepperEcho",
+      "type": "topic_echo",
+      "ros":"pepper",
+      "TopicName": "/chatter",
+      "MessageType": "std_msgs/String"
+    },
+    {
+      "name":"topicPepperPub",
+      "type": "topic_pub",
+      "ros":"pepper",
+      "TopicName": "/chatter",
+      "MessageType": "std_msgs/String",
+      "Message": {
+        "data": "test"
+      }
+    }],[
+    {
+      "name":"service1",
+      "type": "service",
+      "ros":"pr2",
+      "ServiceName": "topic_name",
+      "ServiceType": "type/topic_type",
+      "Req": {
+        "a": 1,
+        "b": 2
+      }
+    },
+    {
+      "name":"service2",
+      "type": "service",
+      "ros":"pr2",
+      "ServiceName": "topic",
+      "ServiceType": "type/topic_type",
+      "Req": {
+        "a": 1,
+        "b": 3
+      }
+    },
+    {
+      "name":"action",
+      "type": "action",
+      "ros":"pr2",
+      "ServerName": "/bash_action_server",
+      "ActionName": "bash_action/BashAction",
+      "GoalMessage": {
+          "action_name": "topiclist"
+      }
+    },
+    {
+      "name":"topicEcho",
+      "type": "topic_echo",
+      "ros":"pr2",
+      "TopicName": "/chatter",
+      "MessageType": "std_msgs/String"
+    },
+    {
+    "name":"topicPub",
+      "type": "topic_pub",
+      "ros":"pr2",
+      "TopicName": "/chatter",
+      "MessageType": "std_msgs/String",
+      "Message": {
+        "data": "test"
+      }
+    }]
+  ]
+}
