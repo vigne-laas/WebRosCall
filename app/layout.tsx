@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased bg-current h-screen`}
+        className={`antialiased h-screen`}
       >
         {children}
       </body>
